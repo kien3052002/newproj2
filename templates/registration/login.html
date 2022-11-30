@@ -1,0 +1,28 @@
+{% extends "base/base.html" %} {% block title %} Login {% endblock %} {%block content%}
+<style>
+    .container {
+        border-radius: 15px;
+        background-color: bisque;
+        width: 80%;
+        height: 600px;
+        position: relative;
+        top: 100px;
+        justify-self: center;
+    }
+    
+    .account-form {
+        position: absolute;
+    }
+</style>
+<div class="container">
+    <form class="account-form p-4 rounded" action="." method="post">
+        {%csrf_token%} <label class="small font-weight-bold">{{ form.username.label}}</label> {{ form.username}}
+
+        <label class="small font-weight-bold">{{ form.password.label}}</label> {{ form.password}}
+
+        <button class="btn btn-dark btn-block py-2 mb-4 mt-5 font-weight-bold" type="submit" value="Log-in">Sign
+            in</button>
+    </form>
+</div>
+
+{%endblock%}

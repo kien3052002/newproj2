@@ -1,0 +1,47 @@
+{% extends "../base/base.html" %} {% block title %}Log-in{% endblock %} {% block content %} {% if request.user.is_authenticated %}
+<script>
+    window.location.href = '{% url "accounts:profile" %}';
+</script>
+{% endif %}
+
+
+
+
+<div class="container">
+
+    <form class="account-form p-4 rounded col-lg-10 mx-auto" action="." method="post">
+        {% csrf_token %}
+        <p class="h4 mb-2 font-weight-bold">Create an account</p>
+
+        {% if form.errors %}
+        <p>Please correct the following errors:</p>
+        {% for field in form %} {% if field.errors %}
+        <div class="alert alert-primary" role="alert">
+            {{ field.label }}: {{ field.errors|striptags }}
+        </div>
+        {% endif %} {% endfor %} {% endif %}
+
+        <label class="small font-weight-bold">{{ form.username.label }}<span class="text-muted">
+                                        (Required)</span></label> {{ form.username }}
+        <label class="small font-weight-bold">{{ form.email.label}}<span class="text-muted">
+                                        (Required)</span></label> {{ form.email }}
+        <label class="small font-weight-bold">{{ form.password.label}}<span class="text-muted">
+                                        (Required)</span></label> {{ form.password }}
+        <small class="form-text text-muted mb-4">
+                                    At least 8 characters and 1 digit
+                                </small> {{ form.password2 }}
+        <small class="form-text text-muted mb-4">
+                                    Repeat password
+                                </small>
+
+
+
+        <button class="btn btn-dark btn-block py-2 mb-4 mt-5 font-weight-bold" type="submit">Register</button>
+
+
+    </form>
+
+
+</div>
+
+{% endblock %}
