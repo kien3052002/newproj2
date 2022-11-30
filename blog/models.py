@@ -28,11 +28,11 @@ class Post(models.Model):
     category = models.ManyToManyField(Category, default=[1])
     excerpt = models.TextField(null=True)
     slug = models.SlugField(max_length=250, unique_for_date='publish')
-    image = models.FileField(upload_to='static/thumbnail/',default='')
+    image = models.FileField(upload_to='static/thumbnail/', default='')
     publish = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='blog_posts')
-    content = RichTextUploadingField(null = True)
+    content = RichTextUploadingField(null=True)
     status = models.CharField(max_length=10, choices=options, default='draft')
     objects = models.Manager()  # default manager
     newmanager = NewManager()  # custom manager
@@ -46,15 +46,13 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    
-
 
 class Comment(models.Model):
 
     post = models.ForeignKey(Post,
                              on_delete=models.CASCADE,
                              related_name='comments')
-    name = models.CharField(max_length=50)
+    name = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     content = models.TextField()
     publish = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=True)
