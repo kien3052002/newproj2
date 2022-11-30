@@ -1,0 +1,12 @@
+{% load static %} {% block content %}
+<link href="{% static 'style.css' %}" rel="stylesheet">
+
+<div class="search-box">
+    <form role="search" method="get" action="/search/">
+        <input class="search-bar form-control me-2" name="q" type="search" placeholder="Tìm kiếm" aria-label="Search"> {% for tag in categorys.all%} {{tag.name}}
+        <input name="c" type="checkbox" value="{{tag.pk}}"> {%endfor%}
+        <button class="btn btn-primary" type="submit">search</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,4 +1,4 @@
- {% extends "base/base.html" %} {% block title %} Welcome to Blog {% endblock %} {% load static %}{% block content %}
+{% extends "base/base.html" %} {% block title %} Welcome to Blog {% endblock %} {% load static %}{% block content %}
 <div class="col">
     <div class="row" id="row-titlecard">
         <div class="titlecard">
@@ -33,14 +33,9 @@
             </div>
         </div>
         <div class="col-4">
-            <div class="search-box">
-                <form class="search-bar" role="search" method="get" action="/search/">
-                    <input class="form-control me-2" name="q" type="search" placeholder="Tìm kiếm" aria-label="Search"> {% for tag in categorys%} {{tag.name}}
-                    <input class="me-2" name="c" type="checkbox" value="{{tag.pk}}"> {%endfor%}
-                    <button class="btn btn-primary" type="submit">search</button>
-                </form>
-            </div>
+            {% include "blog/searchbox.html" %}
         </div>
+
     </div>
     <div class="row" id="row-footer">
         <div class="footer"></div>

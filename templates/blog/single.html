@@ -12,14 +12,16 @@
                 <div class="col-7">
                     <p>{{post.content|safe}}</p>
                 </div>
+                <div>
+                    {% for cmt in comments%}
+                    <div>
+                        <div>{{cmt.name}}</div>
+                        <div>{{cmt.content}}</div>
+                    </div>
+                    {%endfor%}
+                </div>
                 <div class="col-md-7">
-                    {% with comments.count as total_comments %}
-                    <h2>
-                        {{ total_comments }} comment{{ total_comments|pluralize }}
-                    </h2>
-                    {% endwith %} {% for comment in comments %} Comment {{ forloop.counter }} by {{ comment.name }} on {{ comment.publish }} {{ comment.content|linebreaks }} {% empty %}
-                    <p>There are no comments for this post.</p>
-                    {% endfor %} {% if user.is_authenticated%}
+                    {% if user.is_authenticated%}
                     <h2>Make a new comment</h2>
 
                     <form id="myForm" method="post">
