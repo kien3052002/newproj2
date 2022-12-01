@@ -1,28 +1,28 @@
-{% extends "base/base.html" %} {% block title %} Login {% endblock %} {%block content%}
-<style>
-    .container {
-        border-radius: 15px;
-        background-color: bisque;
-        width: 80%;
-        height: 600px;
-        position: relative;
-        top: 100px;
-        justify-self: center;
-    }
-    
-    .account-form {
-        position: absolute;
-    }
-</style>
-<div class="container">
-    <form class="account-form p-4 rounded" action="." method="post">
-        {%csrf_token%} <label class="small font-weight-bold">{{ form.username.label}}</label> {{ form.username}}
+{% extends "base/base.html" %} {% block title %} Login {% endblock %}{%load static%} {%block content%}
 
-        <label class="small font-weight-bold">{{ form.password.label}}</label> {{ form.password}}
+<div class="row" style="height: 100%; width:100%; overflow:hidden;">
 
-        <button class="btn btn-dark btn-block py-2 mb-4 mt-5 font-weight-bold" type="submit" value="Log-in">Sign
+    <div class="col-6">
+        <a class="btn btn-outline-primary" style="position: absolute; top: 20px; left: 20px" href="/">
+            <i class="fa-solid fa-house-chimney" style="margin-right: 5px"></i>HOME</a>
+        <div class="login-container">
+
+            <form class="account-form p-4 rounded" action="." method="post">
+                <p class="h4 mb-2 font-weight-bold">Đăng nhập</p>
+                {%csrf_token%} <label class="font-weight-bold">{{ form.username.label}}</label> {{ form.username}}
+
+                <label class="font-weight-bold">{{ form.password.label}}</label> {{ form.password}}
+
+                <button class="btn btn-dark mb-4 mt-5 font-weight-bold login-button" type="submit" value="Log-in">Sign
             in</button>
-    </form>
+                <p>Chưa có tài khoản? <a style="color: blue;" href="/account/register/">Đăng kí</a> tại đây</p>
+
+            </form>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="sidepic"><img src="{% static 'Chua-keo.jpg' %}" /></div>
+    </div>
 </div>
 
 {%endblock%}

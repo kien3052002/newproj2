@@ -4,13 +4,22 @@ from .forms import NewCommentForm, PostSearchForm
 from django.views.generic import ListView
 from django.db.models import Q
 from django.contrib.auth.models import User
-
+from django.core.paginator import Paginator, EmptyPage
 # Create your views here.
 
 
-def home(request):
+def pagination(request, posts):
+    obj = posts
+    page_n = request.GET.get('page')
+    p = Paginator(obj, 5)
+    list = p.get_page(page_n)
+    return list
 
-    return render(request, 'blog/index.html', {'posts': Post.newmanager.all(), 'categorys': Category.objects.all()})
+
+def home(request):
+    posts = Post.newmanager.all()
+    list = pagination(request, posts)
+    return render(request, 'blog/index.html', {'posts': Post.newmanager.all(), 'categorys': Category.objects.all(), 'list': list})
 
 
 def post_single(request, post):
@@ -33,18 +42,6 @@ def post_single(request, post):
     return render(request, 'blog/single.html', {'post': post, 'comments': comments, 'comment_form': comment_form, })
 
 
-# class CatListView(ListView):
-#     template_name = 'blog/category.html'
-#     context_object_name = 'catlist'
-
-#     def get_queryset(self):
-#         content = {
-#             'cat': self.kwargs['category'],
-#             'posts': Post.objects.filter(category__name=self.kwargs['category']).filter(status='published')
-#         }
-#         return content
-
-
 def post_search(request):
     form = PostSearchForm()
     q = ''
@@ -55,8 +52,9 @@ def post_search(request):
     if form.is_valid():
         q = form.cleaned_data['q']
         c = form.cleaned_data['c']
-        query &= Q(title__contains=q)
+        query &= Q(title__contains=q, status='published')
         results = Post.objects.filter(query)
         for tag in c:
             results = results.filter(category=tag.id)
-    return render(request, 'blog/search.html', {'categorys': Category.objects.all(), 'results': results, 'total_results': results.count})
+    list = pagination(request, results)
+    return render(request, 'blog/search.html', {'categorys': Category.objects.all(), 'posts': results, 'total_results': results.count, 'q': str(q), 'c': c, 'list': list})

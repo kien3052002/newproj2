@@ -1,35 +1,16 @@
-{% extends "base/base.html" %} {% block title %} Welcome to Blog {% endblock %} {% load static %}{% block content %}
+{% extends "base/base.html" %} {% block title %} Welcome to Blog {% endblock %} {% load static %}{% block content %} {%include "base/nav-bar.html"%}
+<div class="bgpic"><img src="{% static 'Bien-Thai-Binh.jpg' %}" /></div>
+
 <div class="col">
     <div class="row" id="row-titlecard">
         <div class="titlecard">
-            <h1 style="font-size:400%">THÀNH PHỐ THÁI BÌNH</h1>
+            <h1 style="font-size:400%">ĐẶC SẢN THÁI BÌNH</h1>
         </div>
     </div>
-    <div class="row " id="row-container">
+    <div class="row ">
         <div class="col-8">
             <div class="container">
-                <div class="row justify-content-md-center ">
-                    <div class="col-md-8 pt-5 ">
-                        {% for post in posts %}
-                        <div class="post-container row">
-
-                            <div class="col-12 ">
-                                <h1>
-                                    <a class="text-dark post-title" href="{{post.get_absolute_url}} ">{{post.title}}</a>
-                                </h1>
-                                <image src="{{post.image}}"></image>
-
-                            </div>
-                            <div class="col-12 ">
-                                <p>{{post.excerpt}}</p>
-                                {% for tag in post.category.all %}
-                                <p>{{tag}}</p>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
+                {% include "blog/list.html" %}
             </div>
         </div>
         <div class="col-4">
@@ -37,9 +18,8 @@
         </div>
 
     </div>
-    <div class="row" id="row-footer">
-        <div class="footer"></div>
-    </div>
+
+    {%include "base/footer.html"%}
 
 </div>
 

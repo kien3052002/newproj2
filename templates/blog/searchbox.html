@@ -3,8 +3,18 @@
 
 <div class="search-box">
     <form role="search" method="get" action="/search/">
-        <input class="search-bar form-control me-2" name="q" type="search" placeholder="Tìm kiếm" aria-label="Search"> {% for tag in categorys.all%} {{tag.name}}
-        <input name="c" type="checkbox" value="{{tag.pk}}"> {%endfor%}
+        <h3>Tìm kiếm</h3>
+        <div class="search-bar">
+            <input class="form-control me-5" name="q" type="search" placeholder="Tìm kiếm" aria-label="Search">
+        </div>
+        <div class="tag-bar">
+            {% for tag in categorys.all%} {%if tag.name != 'default'%}
+            <div class="tag-checkbox">
+                <label for="{{tag}}" class="">{{tag.name}}</label>
+                <input name="c" type="checkbox" id="{{tag}}" value="{{tag.pk}}">
+            </div>
+            {% endif %} {%endfor%}
+        </div>
         <button class="btn btn-primary" type="submit">search</button>
     </form>
 </div>
