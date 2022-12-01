@@ -1,0 +1,44 @@
+{%block content%}
+
+
+<div class="col pt-5">
+    {% for post in list %}
+    <div class="post-container row">
+        <div class="col-3 post-thumbnail ">
+            <image src="/{{post.image}}"></image>
+        </div>
+        <div class="col-9 post-detail">
+            <div class="post-title">
+                <h3>
+                    <a class="text-dark" href="{{post.get_absolute_url}} ">{{post.title}}</a>
+                </h3>
+            </div>
+            <div class="post-meta">
+                <em>{{post.publish}} by {{post.author}}</em>
+            </div>
+            <div class="post-excerpt">
+                <p>{{post.excerpt}}</p>
+            </div>
+            <div class="post-cat">
+                {% for tag in post.category.all %}
+                <a class="tag-btn" href="/search/?q=&c={{tag.id}}">{{tag}}</a> {% endfor %}
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination" style="text-align: center;">
+        {%if list.has_previous%}
+        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{list.previous_page_number}}">Previous</a></li>
+        {%endif%} {%if list.has_next%}
+        <li class="page-item"><a class="page-link" href="?page={{list.next_page_number}}">Next</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{max}}">Last &raquo</a></li>
+        {%endif%}
+    </ul>
+</nav>
+
+
+{%endblock%}

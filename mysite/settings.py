@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 TINYMCE_DEFAULT_CONFIG = {
     'custom_undo_redo_levels': 100,
-    
+
     "menubar": "file edit view insert format tools table help",
     'plugins': 'link image preview codesample contextmenu table code lists fullscreen',
     'toolbar1': 'undo redo | backcolor casechange permanentpen formatpainter removeformat formatselect fontselect fontsizeselect',
@@ -126,8 +126,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'fontsize_formats': "8pt 10pt 12pt 14pt 16pt 18pt",
     'content_style': "body { font-family: Arial; background: white; color: black; font-size: 12pt}",
     'codesample_languages': [
-        {'text': 'Python', 'value': 'python'}, {'text': 'HTML/XML', 'value': 'markup'},],
-    'image_class_list': [{'title': 'Fluid', 'value': 'img-fluid', 'style': {} }],
+        {'text': 'Python', 'value': 'python'}, {'text': 'HTML/XML', 'value': 'markup'}, ],
+    'image_class_list': [{'title': 'Fluid', 'value': 'img-fluid', 'style': {}}],
     'width': 'auto',
     "height": "600px",
     'image_caption': True,
@@ -162,4 +162,4 @@ LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 REGISTER_URL = 'register'
-
+# REGISTER_REDIRECT_URL = "/"

@@ -1,46 +1,76 @@
- {% extends "base/base.html" %} {% block title %} {{post.title}} {% endblock %} {% block content %}
+{% extends "base/base.html" %} {% block title %} {{post.title}} {% endblock %} {%load static%}{% block content %} {%include "base/nav-bar.html"%}
+<div class="bgpic"><img src="{% static 'Thai_2.jpg' %}" /></div>
 <div class="col">
     <div class="row" id="row-titlecard">
         <div class="titlecard">
             <h1>{{post.title}}</h1>
         </div>
     </div>
-    <div class="row" id="row-container">
-        <div class="container">
+    <div class="row">
+
+
+        <div class="content-container">
+
+            <div class="row justify-content-md-center pt-5 ">
+                <div class="col-7">
+                    <h6><em>{{post.publish}} by {{post.author}}</em></h6>
+                    {% if user.is_superuser%}
+                    <span>
+                        <a class="btn btn-primary" href="/admin/blog/post/{{post.id}}/change/" role="button">Chỉnh sửa</a>
+                    </span>
+                    <span>
+                        <a class="btn btn-primary" href="/admin/blog/post/{{post.id}}/delete/" role="button">Xóa</a>
+                    </span> {%endif%}
+                    <hr>
+                    <h3>Tags:</h3>
+                    <div class="post-cat">
+                        {% for tag in post.category.all %}
+                        <a class="tag-btn" href="/category/{{tag}}">{{tag}}</a> {% endfor %}
+                    </div>
+                </div>
+            </div>
             <div class="row justify-content-md-center pt-5">
 
                 <div class="col-7">
                     <p>{{post.content|safe}}</p>
                 </div>
-                <div>
-                    {% for cmt in comments%}
-                    <div>
-                        <div>{{cmt.name}}</div>
-                        <div>{{cmt.content}}</div>
+                <div class="col-7 cmt-section">
+                    <div class="row">
+                        <h2>Bình luận:</h2>
+                        {% for cmt in comments%}
+                        <div class="cmt">
+                            <div><b>{{cmt.name}}</b></div>
+                            <div>{{cmt.content}}</div>
+                            {% if user.is_superuser%}
+                            <span>
+                        <a href="/admin/blog/comment/{{cmt.id}}/change/" >Chỉnh sửa</a>
+                    </span> <a href="/admin/blog/comment/{{cmt.id}}/delete/">Xóa</a>
+                            </span>{%endif%}
+                        </div>
+                        {%endfor%}
                     </div>
-                    {%endfor%}
-                </div>
-                <div class="col-md-7">
-                    {% if user.is_authenticated%}
-                    <h2>Make a new comment</h2>
+                    <div class="row">
+                        <div class="new-cmt">
+                            {% if user.is_authenticated%}
+                            <h2>Để lại bình luận:</h2>
 
-                    <form id="myForm" method="post">
-                        {{ comment_form.as_p }} {% csrf_token %}
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
-                    </form>
-                    {%endif%}
+                            <form id="myForm" method="post">
+                                {{ comment_form.as_p }} {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+                            </form>
+                            {%endif%}
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
-    <div class="row" id="row-footer">
-        <div class="footer"></div>
-    </div>
+
 
 </div>
 
 <script>
     $('#myForm').trigger("reset");
 </script>
-
-{% endblock %}
+{% include "base/footer.html"%} {% endblock %}
