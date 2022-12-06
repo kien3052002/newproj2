@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware'
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -157,9 +158,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 REGISTER_URL = 'register'
-# REGISTER_REDIRECT_URL = "/"
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY_GRACE_PERIOD = 10*60

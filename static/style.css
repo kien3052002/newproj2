@@ -54,6 +54,12 @@
     padding: 20px 10px 10px 10px;
 }
 
+@media only screen and (max-width: 700px) {
+    .search-box {
+        display: none;
+    }
+}
+
 .search-box form {
     display: flex;
     flex-direction: column;
@@ -90,16 +96,29 @@
     text-decoration: none;
     display: flex;
     align-items: center;
+    justify-content: center;
     color: white;
     background-color: black;
-    padding-left: 40px;
-    padding-right: 40px;
     height: 100%;
+    width: 170px;
 }
 
-.nav-log {
+.nav-right-1 {
     justify-self: flex-end;
+    order: 2;
+    margin-left: 0;
     margin-right: 0;
+}
+
+.nav-right-2 {
+    justify-self: flex-end;
+    order: 1;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+#dropdown {
+    display: none;
 }
 
 .welcome {
@@ -115,6 +134,22 @@
     padding-right: 40px;
     height: 100%;
     margin-left: 100px;
+    margin-right: auto;
+}
+
+@media only screen and (max-width: 640px) {
+    .welcome {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    .nav-right-1 {
+        display: none;
+    }
+    .nav-right-2 {
+        display: none;
+    }
 }
 
 .nav-button:hover {
@@ -143,6 +178,7 @@
     margin: 0 0 20px 20px;
     height: 200px;
     max-width: 800px;
+    overflow: hidden;
 }
 
 .post-container .post-thumbnail {
@@ -155,9 +191,8 @@
 }
 
 .post-container .post-thumbnail img {
-    min-width: 100%;
-    min-height: 100%;
-    margin: auto;
+    width: 100%;
+    height: 100%;
 }
 
 .post-container .post-detail {
@@ -246,12 +281,13 @@
 .account-form {
     top: 100px;
     left: 100px;
-    position: absolute;
+    position: relative;
+    width: 100%;
 }
 
 .login-container {
     background-color: white;
-    width: 100%;
+    width: 50%;
     height: auto;
     min-height: 750px;
     justify-self: center;
@@ -267,7 +303,8 @@
 
 .login-form-control {
     margin: 10px 0 10px 0;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     height: 55px;
     border-radius: 2rem;
     font-size: large;
@@ -275,7 +312,8 @@
 
 .register-form-control {
     margin: 15px 0 10px 0;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     height: 50px;
     border-radius: 2rem;
     font-size: large;
@@ -336,23 +374,53 @@
 }
 
 .content-container .cmt-section {
+    padding-top: 30px;
+    border-top: solid #adb5bd 2px;
     margin-top: 90px;
+    margin-bottom: 40px;
     position: relative;
     display: table;
     flex-direction: column;
     align-items: center;
+    width: 500px
 }
 
 .cmt {
+    overflow-wrap: break-word;
+    padding: 5px 0 5px 10px;
+    position: relative;
+    background-color: #ddd;
     display: table-row;
-    margin-top: 20px;
     border: solid #0094FF 1px;
     border-left: solid #0094FF 5px;
     border-radius: 5px;
+    margin: auto;
+    margin-top: 15px;
+    justify-self: center;
+    width: 700px;
+}
+
+.cmt #cmt-date {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+}
+
+.cmt #cmt-tools {
+    display: flex;
+}
+
+#cmt-tools div {
+    justify-self: flex-end;
+    margin-left: auto;
+    margin-right: 10px;
 }
 
 .new-cmt {
-    margin-top: 20px;
+    margin: auto;
+    justify-self: center;
+    width: 700px;
+    margin-bottom: 20px;
 }
 
 .edit-btn {
@@ -392,4 +460,15 @@
     display: flex;
     justify-content: space-evenly;
     margin-bottom: 100px;
+}
+
+.active>.page-link {
+    z-index: 0;
+}
+
+#like,
+#unlike {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }

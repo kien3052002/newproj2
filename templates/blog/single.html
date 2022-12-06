@@ -7,13 +7,10 @@
         </div>
     </div>
     <div class="row">
-
-
         <div class="content-container">
-
             <div class="row justify-content-md-center pt-5 ">
                 <div class="col-7">
-                    <h6><em>{{post.publish}} by {{post.author}}</em></h6>
+                    <h6><em>{{post.publish}} by {{post.author}}</em><br><br>Lượt thích: {{post.likes.count}}</h6>
                     {% if user.is_superuser%}
                     <span>
                         <a class="btn btn-primary" href="/admin/blog/post/{{post.id}}/change/" role="button">Chỉnh sửa</a>
@@ -25,7 +22,7 @@
                     <h3>Tags:</h3>
                     <div class="post-cat">
                         {% for tag in post.category.all %}
-                        <a class="tag-btn" href="/category/{{tag}}">{{tag}}</a> {% endfor %}
+                        <a class="tag-btn" href="/search/?q=&c={{tag.id}}">{{tag}}</a> {% endfor %}
                     </div>
                 </div>
             </div>
@@ -34,32 +31,47 @@
                 <div class="col-7">
                     <p>{{post.content|safe}}</p>
                 </div>
+                <div class="col-7" style="display: flex; align-items: center; margin-top: 50px;">
+                    <form action="/like/{{post.slug}}" method="post">
+                        {% csrf_token %} {%if is_liked%}
+                        <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary" id="unlike"><i class="fa-sharp fa-solid fa-thumbs-up"></i>&nbsp;Đã thích 
+                            {%else%}
+                        <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-outline-primary" id="like" {% if not user.is_authenticated%} disabled {%endif%}><i class="fa-sharp fa-solid fa-thumbs-up"></i>&nbsp;Thích 
+                            {%endif%}
+                        {{post.likes.count}}</button>
+                    </form>
+                    {% if not user.is_authenticated%}
+                    <p style="margin: 0; "><em>&nbsp; *Đăng nhập để thêm lượt Thích</em>
+                    </p> {%endif%}
+                </div>
                 <div class="col-7 cmt-section">
                     <div class="row">
-                        <h2>Bình luận:</h2>
+                        <div class="new-cmt">
+                            <h2>Để lại bình luận:</h2>
+                            <form method="post">
+                                {{ comment_form.as_p }} {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-lg btn-block" {% if not user.is_authenticated%} disabled {%endif%}>Submit</button> {% if not user.is_authenticated%}
+                                <p style="margin-top: 5px; "><em>&nbsp; *Đăng nhập để thêm bình luận</em>
+                                </p> {%endif%}
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h2>Bình luận ({{comments.count}}):</h2>
                         {% for cmt in comments%}
                         <div class="cmt">
                             <div><b>{{cmt.name}}</b></div>
+                            <div id="cmt-date">{{cmt.publish}}</div>
                             <div>{{cmt.content}}</div>
                             {% if user.is_superuser%}
-                            <span>
-                        <a href="/admin/blog/comment/{{cmt.id}}/change/" >Chỉnh sửa</a>
-                    </span> <a href="/admin/blog/comment/{{cmt.id}}/delete/">Xóa</a>
-                            </span>{%endif%}
+                            <div id="cmt-tools">
+                                <div>
+                                    <a href="/admin/blog/comment/{{cmt.id}}/change/">Chỉnh sửa</a>
+                                    <a href="/admin/blog/comment/{{cmt.id}}/delete/">Xóa</a>
+                                </div>
+                            </div>{%endif%}
                         </div>
                         {%endfor%}
-                    </div>
-                    <div class="row">
-                        <div class="new-cmt">
-                            {% if user.is_authenticated%}
-                            <h2>Để lại bình luận:</h2>
-
-                            <form id="myForm" method="post">
-                                {{ comment_form.as_p }} {% csrf_token %}
-                                <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
-                            </form>
-                            {%endif%}
-                        </div>
                     </div>
                 </div>
 
@@ -70,7 +82,4 @@
 
 </div>
 
-<script>
-    $('#myForm').trigger("reset");
-</script>
 {% include "base/footer.html"%} {% endblock %}

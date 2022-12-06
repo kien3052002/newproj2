@@ -5,7 +5,7 @@
     {% for post in list %}
     <div class="post-container row">
         <div class="col-3 post-thumbnail ">
-            <image src="/{{post.image}}"></image>
+            <img src="/{{post.image}}" />
         </div>
         <div class="col-9 post-detail">
             <div class="post-title">
@@ -21,9 +21,8 @@
             </div>
             <div class="post-cat">
                 {% for tag in post.category.all %}
-                <a class="tag-btn" href="/search/?q=&c={{tag.id}}">{{tag}}</a> {% endfor %}
+                <a class="tag-btn" href="/search/?q=&c={{tag.id}}">{{tag}}</a>{%endfor%}
             </div>
-
         </div>
     </div>
     {% endfor %}
@@ -31,11 +30,18 @@
 <nav aria-label="Page navigation example">
     <ul class="pagination" style="text-align: center;">
         {%if list.has_previous%}
-        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
-        <li class="page-item"><a class="page-link" href="?page={{list.previous_page_number}}">Previous</a></li>
-        {%endif%} {%if list.has_next%}
-        <li class="page-item"><a class="page-link" href="?page={{list.next_page_number}}">Next</a></li>
-        <li class="page-item"><a class="page-link" href="?page={{max}}">Last &raquo</a></li>
+        <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{list.previous_page_number}}">
+                <</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?page={{list.previous_page_number}}">{{list.previous_page_number}}</a></li>
+        {%endif%}
+        <li class="page-item active"><a class="page-link" href="?page={{list.number}}">{{list.number}}</a></li>
+        {%if list.has_next%}
+        <li class="page-item"><a class="page-link" href="?page={{list.next_page_number}}">{{list.next_page_number}}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{list.next_page_number}}">></a></li>
+        <li class="page-item"><a class="page-link" href="?page={{list.paginator.num_pages}}">Last</a></li>
         {%endif%}
     </ul>
 </nav>

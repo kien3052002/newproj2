@@ -1,20 +1,21 @@
 {% extends "base/base.html" %} {% block title %} Login {% endblock %}{%load static%} {%block content%}
 
-<div class="row" style="height: 100%; width:100%; overflow:hidden;">
+<div class="row" style="height: auto; width:100%; overflow:hidden;">
 
-    <div class="col-6">
-        <a class="btn btn-outline-primary" style="position: absolute; top: 20px; left: 20px" href="/">
+    <div class="col-6" style="overflow: hidden;">
+        <a class="btn btn-outline-dark" style="position: absolute; top: 20px; left: 20px" href="/">
             <i class="fa-solid fa-house-chimney" style="margin-right: 5px"></i>HOME</a>
         <div class="login-container">
 
-            <form class="account-form p-4 rounded" action="." method="post">
+            <form class="account-form p-4 rounded" action="" method="post">
                 <p class="h4 mb-2 font-weight-bold">Đăng nhập</p>
                 {%csrf_token%} <label class="font-weight-bold">{{ form.username.label}}</label> {{ form.username}}
 
                 <label class="font-weight-bold">{{ form.password.label}}</label> {{ form.password}}
 
                 <button class="btn btn-dark mb-4 mt-5 font-weight-bold login-button" type="submit" value="Log-in">Sign
-            in</button>
+            in</button> {% if form.errors %}
+                <div class="alert alert-primary" role="alert">!!!!!!!!!!!!!!</div>{%endif%}
                 <p>Chưa có tài khoản? <a style="color: blue;" href="/account/register/">Đăng kí</a> tại đây</p>
 
             </form>

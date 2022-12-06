@@ -1,6 +1,5 @@
 from django import forms
 from .models import Comment, Category
-from mptt.forms import TreeNodeChoiceField
 
 
 class NewCommentForm(forms.ModelForm):
@@ -8,7 +7,7 @@ class NewCommentForm(forms.ModelForm):
         model = Comment
         fields = ('content', )
         widgets = {
-            'content': forms.Textarea(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 100px'}),
         }
 
 
