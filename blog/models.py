@@ -37,7 +37,7 @@ class Post(models.Model):
         User, on_delete=models.CASCADE, related_name='blog_posts')
     content = RichTextUploadingField(null=True)
     status = models.CharField(max_length=10, choices=options, default='draft')
-    likes = models.ManyToManyField(User, default=None, related_name='likes')
+    likes = models.ManyToManyField(User, blank=True, related_name='likes')
     objects = models.Manager()  # default manager
     newmanager = NewManager()  # custom manager
 

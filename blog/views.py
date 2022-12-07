@@ -1,12 +1,11 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect, HttpResponse
 from .models import Post, Category
 from .forms import NewCommentForm, PostSearchForm
 from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage
-from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from random import shuffle
-from django.http import HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
+
 # Create your views here.
 
 
@@ -36,6 +35,15 @@ def home(request):
 def post_single(request, post):
     post = get_object_or_404(Post, slug=post, status='published')
     user_comment = None
+    suggestions = list(suggest(post))
+    if post in suggestions:
+        suggestions.remove(post)
+    shuffle(suggestions)
+    if len(suggestions) > 3:
+        suggestions = suggestions[0:3]
+    is_liked = False
+    if post.likes.filter(id=request.user.id).exists():
+        is_liked = True
     if request.method == 'POST':
         comment_form = NewCommentForm(request.POST)
         if comment_form.is_valid():
@@ -47,11 +55,7 @@ def post_single(request, post):
     else:
         comment_form = NewCommentForm()
     comments = post.comments.filter(status=True)
-    suggestions = None
-    is_liked = False
-    if post.likes.filter(id=request.user.id).exists():
-        is_liked = True
-    return render(request, 'blog/single.html', {'post': post, 'comments': comments, 'comment_form': comment_form, 'suggestions': suggestions, 'is_liked': is_liked})
+    return render(request, 'blog/single.html', {'post': post, 'comments': comments, 'comment_form': comment_form, 'suggestions_list': suggestions, 'is_liked': is_liked})
 
 
 def post_search(request):
@@ -63,7 +67,8 @@ def post_search(request):
     if form.is_valid():
         q = form.cleaned_data['q']
         c = form.cleaned_data['c']
-        results = Post.objects.filter(Q(title__contains=q, status='published'))
+        results = Post.newmanager.filter(
+            Q(title__contains=q, status='published'))
         for tag in c:
             results = results.filter(category=tag.id)
     list = pagination(request, results)
@@ -72,10 +77,27 @@ def post_search(request):
 
 def suggest(post):
     tags = post.category.all()
-    suggestions = {}
+    suggestions = []
+    query = Q()
     for tag in tags:
-        s = list(tag.posts.all())
-        suggestions.update(s)
-    suggestions = list(suggestions)
-    shuffle(suggestions)
-    return suggestions[0:3]
+        query = query or Q(category=tag.id)
+    suggestions = Post.newmanager.filter(query)
+    return suggestions
+
+
+def edit_post(request, post):
+    user = request.user
+    post = get_object_or_404(Post, slug=post, status='published')
+    id = str(post.id)
+    if user == post.author or user.is_superuser:
+        return HttpResponseRedirect('/admin/blog/post/'+id + '/change')
+    return HttpResponseRedirect('/')
+
+
+def delete_post(request, post):
+    user = request.user
+    post = get_object_or_404(Post, slug=post, status='published')
+    id = str(post.id)
+    if user == post.author or user.is_superuser:
+        return HttpResponseRedirect('/admin/blog/post/'+id + '/delete')
+    return HttpResponseRedirect('/')

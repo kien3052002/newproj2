@@ -216,8 +216,8 @@
 .post-container .post-detail .post-excerpt {
     position: absolute;
     bottom: 45px;
-    margin-bottom: 15px;
-    height: 35px;
+    margin-bottom: 13px;
+    height: 34px;
     width: 90%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -375,29 +375,25 @@
 
 .content-container .cmt-section {
     padding-top: 30px;
-    border-top: solid #adb5bd 2px;
-    margin-top: 90px;
     margin-bottom: 40px;
     position: relative;
     display: table;
     flex-direction: column;
     align-items: center;
-    width: 500px
 }
 
 .cmt {
     overflow-wrap: break-word;
     padding: 5px 0 5px 10px;
-    position: relative;
-    background-color: #ddd;
+    background-color: rgb(241, 241, 241);
     display: table-row;
     border: solid #0094FF 1px;
     border-left: solid #0094FF 5px;
     border-radius: 5px;
-    margin: auto;
     margin-top: 15px;
     justify-self: center;
     width: 700px;
+    position: relative;
 }
 
 .cmt #cmt-date {
@@ -417,7 +413,6 @@
 }
 
 .new-cmt {
-    margin: auto;
     justify-self: center;
     width: 700px;
     margin-bottom: 20px;
@@ -471,4 +466,43 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+}
+
+.suggestion-slide {
+    height: 100%;
+}
+
+.suggestions {
+    margin-left: 50px;
+    border-left: solid 2px #C0C0C0;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: table;
+    position: sticky;
+    top: 80px;
+}
+
+.suggestion-item {
+    display: flex;
+    height: 200px;
+    width: 150px;
+    justify-content: center;
+    text-decoration: none;
+    margin-top: 15px;
+}
+
+.suggestion-item img {
+    height: 135px;
+    width: 150px;
+}
+
+.suggestion-item p {
+    height: 53px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 17px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    color: black;
 }
