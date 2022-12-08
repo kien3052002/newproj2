@@ -137,3 +137,12 @@ def delete_cmt(request, id):
     user_comment = Comment.objects.get(id=id)
     user_comment.delete()
     return HttpResponseRedirect(referer)
+
+
+def my_bookmarks(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+    posts = Post.objects.filter(bookmark=request.user.id)
+    list = pagination(request, posts)
+    bookmark_page = True
+    return render(request, 'blog/index.html', {'posts': posts, 'categorys': Category.objects.all(), 'list': list, 'bookmark_page': bookmark_page})
