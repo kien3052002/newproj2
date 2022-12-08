@@ -1,13 +1,11 @@
-{% extends "../base/base.html" %} {% block title %}Profile{% endblock %} {% block content %} {% include "../base/navbar.html" %}
-<div class="container">
-    <section class="jumbotron text-center bg-white">
-        <div class="container">
-            <h1>User Dashboard</h1>
-            <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-            <p>
-                <a href="#" class="btn btn-primary my-2">Logout</a>
-            </p>
+{% extends "base/base.html" %}{% load static %} {% block title %}Profile{% endblock %} {% block content %} {% include "base/nav-bar.html" %}
+<div class="col">
+    <div class="row profile-bg">
+        <div class="bgpic" style="padding: 0;"><img src="{% static 'Bien-Thai-Binh.jpg' %}" /></div>
+        <div class="profile-container">
+
         </div>
-    </section>
+        <div class="user-search"></div>
+    </div>
 </div>
-{% include "base/footer.html" %} {% endblock %}
+{% endblock %}

@@ -18,12 +18,23 @@ def pagination(request, posts):
 
 
 def like(request, post):
+    referer = request.META.get('HTTP_REFERER')
     post = get_object_or_404(Post, slug=post)
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return HttpResponseRedirect(reverse('blog:post_single', args=[post.slug]))
+    return HttpResponseRedirect(referer)
+
+
+def bookmark(request, post):
+    referer = request.META.get('HTTP_REFERER')
+    post = get_object_or_404(Post, slug=post)
+    if post.bookmark.filter(id=request.user.id).exists():
+        post.bookmark.remove(request.user)
+    else:
+        post.bookmark.add(request.user)
+    return HttpResponseRedirect(referer)
 
 
 def home(request):
@@ -32,18 +43,26 @@ def home(request):
     return render(request, 'blog/index.html', {'posts': Post.newmanager.all(), 'categorys': Category.objects.all(), 'list': list})
 
 
-def post_single(request, post):
-    post = get_object_or_404(Post, slug=post, status='published')
-    user_comment = None
-    suggestions = list(suggest(post))
-    if post in suggestions:
-        suggestions.remove(post)
-    shuffle(suggestions)
-    if len(suggestions) > 3:
-        suggestions = suggestions[0:3]
+def check_like(request, post):
     is_liked = False
     if post.likes.filter(id=request.user.id).exists():
         is_liked = True
+    return is_liked
+
+
+def check_bookmark(request, post):
+    is_marked = False
+    if post.bookmark.filter(id=request.user.id).exists():
+        is_marked = True
+    return is_marked
+
+
+def post_single(request, post):
+    post = get_object_or_404(Post, slug=post, status='published')
+    user_comment = None
+    suggestions = suggest(post)
+    is_liked = check_like(request, post)
+    is_marked = check_bookmark(request, post)
     if request.method == 'POST':
         comment_form = NewCommentForm(request.POST)
         if comment_form.is_valid():
@@ -55,7 +74,7 @@ def post_single(request, post):
     else:
         comment_form = NewCommentForm()
     comments = post.comments.filter(status=True)
-    return render(request, 'blog/single.html', {'post': post, 'comments': comments, 'comment_form': comment_form, 'suggestions_list': suggestions, 'is_liked': is_liked})
+    return render(request, 'blog/single.html', {'post': post, 'comments': comments, 'comment_form': comment_form, 'suggestions_list': suggestions, 'is_liked': is_liked, 'is_marked': is_marked})
 
 
 def post_search(request):
@@ -81,23 +100,10 @@ def suggest(post):
     query = Q()
     for tag in tags:
         query = query or Q(category=tag.id)
-    suggestions = Post.newmanager.filter(query)
+    suggestions = list(Post.newmanager.filter(query))
+    if post in suggestions:
+        suggestions.remove(post)
+    shuffle(suggestions)
+    if len(suggestions) > 3:
+        suggestions = suggestions[0:3]
     return suggestions
-
-
-def edit_post(request, post):
-    user = request.user
-    post = get_object_or_404(Post, slug=post, status='published')
-    id = str(post.id)
-    if user == post.author or user.is_superuser:
-        return HttpResponseRedirect('/admin/blog/post/'+id + '/change')
-    return HttpResponseRedirect('/')
-
-
-def delete_post(request, post):
-    user = request.user
-    post = get_object_or_404(Post, slug=post, status='published')
-    id = str(post.id)
-    if user == post.author or user.is_superuser:
-        return HttpResponseRedirect('/admin/blog/post/'+id + '/delete')
-    return HttpResponseRedirect('/')

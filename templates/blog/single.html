@@ -10,37 +10,46 @@
     <div class="row">
         <div class="content-container">
             <div class="row justify-content-md-center pt-5 ">
-                <div class="col-8">
+                <div class="col-8" style="position: relative;">
                     <h6><em>{{post.publish}} by {{post.author}}</em><br><br>Lượt thích: {{post.likes.count}}</h6>
                     {% if user.is_superuser or user == post.author%}
                     <span>
-                        <a class="btn btn-primary" href="../{{post.slug}}/edit" role="button">Chỉnh sửa</a>
+                        <a class="btn btn-primary" href="../admin/blog/post/{{post.id}}/change" role="button">Chỉnh sửa</a>
                     </span>
                     <span>
-                        <a class="btn btn-primary" href="../{{post.slug}}/delete" role="button">Xóa</a>
-                    </span> {%endif%}
+                        <a class="btn btn-primary" href="../admin/blog/post/{{post.id}}/delete" role="button">Xóa</a>
+                    </span> {%endif%} {% if user.is_authenticated%}
+                    <form action=" /bookmark/{{post.slug}} " style="margin-right: 0px; " method="post " id="bookmark">
+                        {% csrf_token %} {%if is_marked %}
+                        <button type="submit " name="post_id " value="{{post.id}} " class="btn btn-primary "><i class="fa-solid fa-bookmark "></i>&nbsp;Bỏ dấu 
+                                {%else%}
+                            <button type="submit " name="post_id " value="{{post.id}} " class="btn btn-outline-primary " ><i class="fa-regular fa-bookmark "></i>&nbsp;Đánh dấu 
+                                {%endif%}
+                            </button>
+                    </form>
+                    {%endif%}
                     <hr>
                     <h3>Tags:</h3>
-                    <div class="post-cat">
+                    <div class="post-cat ">
                         {% for tag in post.category.all %}
-                        <a class="tag-btn" href="/search/?q=&c={{tag.id}}">{{tag}}</a> {% endfor %}
+                        <a class="tag-btn " href="/search/?q=&c={{tag.id}} ">{{tag}}</a> {% endfor %}
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-md-center pt-5">
-                <div class="col-12" style="position: relative; display: flex;">
-                    <div class="col-2"></div>
-                    <div class="col-8" style="padding-right: 10px;">
+            <div class="row justify-content-md-center pt-5 ">
+                <div class="col-12 " style="position: relative; display: flex; ">
+                    <div class="col-2 "></div>
+                    <div class="col-8 " style="padding-right: 10px; ">
                         <p>{{post.content|safe}}</p>
                     </div>
-                    <div class="col-2 suggestion-slide">
-                        <div class="suggestions">
-                            <div style="display: table-row; border-top: solid;">
-                                <h3 style="text-align: center;">Gợi ý</h3>
+                    <div class="col-2 suggestion-slide ">
+                        <div class="suggestions ">
+                            <div style="display: table-row; border-top: solid; ">
+                                <h3 style="text-align: center; ">Gợi ý</h3>
                             </div>
                             {% for item in suggestions_list %} {%if item.title != post.title%}
 
-                            <a href="{{item.get_absolute_url}}" class="suggestion-item">
+                            <a href="{{item.get_absolute_url}} " class="suggestion-item ">
                                 <div>
                                     <img src="/{{item.image}} ">
                                     <p>{{item.title}}</p>
@@ -51,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8" style="display: flex; align-items: center; margin-top: 50px; ">
+                <div class="col-8 " style="display: flex; align-items: center; margin-top: 50px; ">
                     <form action="/like/{{post.slug}} " method="post ">
                         {% csrf_token %} {%if is_liked%}
                         <button type="submit " name="post_id " value="{{post.id}} " class="btn btn-primary " id="unlike "><i class="fa-sharp fa-solid fa-thumbs-up "></i>&nbsp;Đã thích 
@@ -64,11 +73,12 @@
                     <p style="margin: 0; "><em>&nbsp; *Đăng nhập để thêm lượt Thích</em>
                     </p> {%endif%}
                 </div>
-                <div class="col-8 cmt-section" style="justify-self:flex-start;">
+
+                <div class="col-8 cmt-section " style="justify-self:flex-start; ">
                     <div class="row ">
                         <div class="new-cmt ">
                             <h2>Để lại bình luận:</h2>
-                            <form method="post " id="myForm">
+                            <form method="post " id="myForm ">
                                 {{ comment_form.as_p }} {% csrf_token %}
                                 <button type="submit " class="btn btn-primary btn-lg btn-block " {% if not user.is_authenticated%} disabled {%endif%}>Submit</button> {% if not user.is_authenticated%}
                                 <p style="margin-top: 5px; "><em>&nbsp; *Đăng nhập để thêm bình luận</em>
@@ -79,12 +89,12 @@
                     <div class="row ">
                         <h2>Bình luận ({{comments.count}}):</h2>
                         {% for cmt in comments%}
-                        <div class="cmt">
+                        <div class="cmt ">
                             <div><b>{{cmt.name}}</b></div>
-                            <div id="cmt-date">{{cmt.publish}}</div>
+                            <div id="cmt-date ">{{cmt.publish}}</div>
                             <div>{{cmt.content}}</div>
                             {% if user.is_superuser or user == post.author or user == cmt.name%}
-                            <div id="cmt-tools">
+                            <div id="cmt-tools ">
                                 <div>
                                     <a href="/admin/blog/comment/{{cmt.id}}/change/ ">Chỉnh sửa</a>
                                     <a href="/admin/blog/comment/{{cmt.id}}/delete/ ">Xóa</a>
@@ -94,7 +104,6 @@
                         {%endfor%}
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -102,7 +111,7 @@
 
 </div>
 <script>
-    $('#myForm').trigger("reset");
+    $('#myForm').trigger("reset ");
 </script>
 
 {% include "base/footer.html "%} {% endblock %}
