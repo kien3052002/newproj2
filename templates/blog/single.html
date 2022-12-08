@@ -18,8 +18,14 @@
                     </span>
                     <span>
                         <a class="btn btn-primary" href="../admin/blog/post/{{post.id}}/delete" role="button">Xóa</a>
-                    </span> {%endif%} {% if user.is_authenticated%}
-                    <form action=" /bookmark/{{post.slug}} " style="margin-right: 0px; " method="post " id="bookmark">
+                    </span>
+                    <span>
+                        {%if post.status == 'published'%}
+                        <a class="btn btn-primary" href="/hide/{{post.slug}} " role="button">Ẩn</a>
+                        {%else%}
+                        <a class="btn btn-danger" href="/hide/{{post.slug}} " role="button">Bỏ Ẩn</a>
+                    </span> {%endif%} {%endif%} {% if user.is_authenticated%}
+                    <form action=" /bookmark/{{post.slug}} " method="post " id="bookmark">
                         {% csrf_token %} {%if is_marked %}
                         <button type="submit " name="post_id " value="{{post.id}} " class="btn btn-primary "><i class="fa-solid fa-bookmark "></i>&nbsp;Bỏ dấu 
                                 {%else%}
@@ -74,30 +80,31 @@
                     </p> {%endif%}
                 </div>
 
-                <div class="col-8 cmt-section " style="justify-self:flex-start; ">
-                    <div class="row ">
-                        <div class="new-cmt ">
+                <div class="col-8 cmt-section">
+                    <div class="row">
+                        <div class="new-cmt">
                             <h2>Để lại bình luận:</h2>
-                            <form method="post " id="myForm ">
+                            <form method="post">
                                 {{ comment_form.as_p }} {% csrf_token %}
-                                <button type="submit " class="btn btn-primary btn-lg btn-block " {% if not user.is_authenticated%} disabled {%endif%}>Submit</button> {% if not user.is_authenticated%}
+                                <button type="submit" class="btn btn-primary btn-lg btn-block" {% if not user.is_authenticated%} disabled {%endif%}>Submit</button> {% if not user.is_authenticated%}
                                 <p style="margin-top: 5px; "><em>&nbsp; *Đăng nhập để thêm bình luận</em>
                                 </p> {%endif%}
                             </form>
                         </div>
                     </div>
-                    <div class="row ">
+                    <div class="row">
                         <h2>Bình luận ({{comments.count}}):</h2>
                         {% for cmt in comments%}
-                        <div class="cmt ">
+                        <div class="cmt">
                             <div><b>{{cmt.name}}</b></div>
-                            <div id="cmt-date ">{{cmt.publish}}</div>
+                            <div id="cmt-date">{{cmt.publish}}</div>
                             <div>{{cmt.content}}</div>
                             {% if user.is_superuser or user == post.author or user == cmt.name%}
                             <div id="cmt-tools ">
                                 <div>
-                                    <a href="/admin/blog/comment/{{cmt.id}}/change/ ">Chỉnh sửa</a>
-                                    <a href="/admin/blog/comment/{{cmt.id}}/delete/ ">Xóa</a>
+                                    {% if user.is_superuser or user == post.author%}
+                                    <a href="/admin/blog/comment/{{cmt.id}}/change/">Chỉnh sửa</a> {%endif%}
+                                    <a href="/delete_cmt/{{cmt.id}}">Xóa</a>
                                 </div>
                             </div>{%endif%}
                         </div>

@@ -1,10 +1,9 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect, HttpResponse
-from .models import Post, Category
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from .models import Post, Category, Comment
 from .forms import NewCommentForm, PostSearchForm
 from django.db.models import Q
 from django.core.paginator import Paginator
 from random import shuffle
-from django.urls import reverse
 
 # Create your views here.
 
@@ -37,10 +36,22 @@ def bookmark(request, post):
     return HttpResponseRedirect(referer)
 
 
-def home(request):
+def standard_filter(request):
     posts = Post.newmanager.all()
+    user = request.user
+    if user.is_superuser or user.is_staff:
+        if user.is_superuser:
+            posts = Post.objects.all()
+        else:
+            posts = Post.objects.filter(
+                Q(status='published')) | Post.objects.filter(Q(author=user, status='draft'))
+    return posts
+
+
+def home(request):
+    posts = standard_filter(request)
     list = pagination(request, posts)
-    return render(request, 'blog/index.html', {'posts': Post.newmanager.all(), 'categorys': Category.objects.all(), 'list': list})
+    return render(request, 'blog/index.html', {'posts': posts, 'categorys': Category.objects.all(), 'list': list})
 
 
 def check_like(request, post):
@@ -58,7 +69,9 @@ def check_bookmark(request, post):
 
 
 def post_single(request, post):
-    post = get_object_or_404(Post, slug=post, status='published')
+    post = get_object_or_404(Post, slug=post)
+    if post.status == 'draft' and request.user != post.author and not request.user.is_superuser:
+        return HttpResponseRedirect('/')
     user_comment = None
     suggestions = suggest(post)
     is_liked = check_like(request, post)
@@ -69,6 +82,7 @@ def post_single(request, post):
             user_comment = comment_form.save(commit=False)
             user_comment.name = request.user
             user_comment.post = post
+            user_comment.post_author = post.author
             user_comment.save()
             return HttpResponseRedirect('/' + post.slug)
     else:
@@ -78,16 +92,14 @@ def post_single(request, post):
 
 
 def post_search(request):
-    form = PostSearchForm()
     q = ''
     c = ''
-    results = []
+    results = standard_filter(request)
     form = PostSearchForm(request.GET)
     if form.is_valid():
         q = form.cleaned_data['q']
         c = form.cleaned_data['c']
-        results = Post.newmanager.filter(
-            Q(title__contains=q, status='published'))
+        results = results.filter(title__contains=q)
         for tag in c:
             results = results.filter(category=tag.id)
     list = pagination(request, results)
@@ -107,3 +119,21 @@ def suggest(post):
     if len(suggestions) > 3:
         suggestions = suggestions[0:3]
     return suggestions
+
+
+def hide_post(request, post):
+    referer = request.META.get('HTTP_REFERER')
+    post = get_object_or_404(Post, slug=post)
+    if post.status == 'draft':
+        post.status = 'published'
+    else:
+        post.status = 'draft'
+    post.save()
+    return HttpResponseRedirect(referer)
+
+
+def delete_cmt(request, id):
+    referer = request.META.get('HTTP_REFERER')
+    user_comment = Comment.objects.get(id=id)
+    user_comment.delete()
+    return HttpResponseRedirect(referer)

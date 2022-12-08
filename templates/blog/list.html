@@ -23,8 +23,8 @@
                 {% for tag in post.category.all %}
                 <a class="tag-btn" href="/search/?q=&c={{tag.id}}">{{tag}}</a>{%endfor%}
             </div>
-            {% if user.is_authenticated%}
-            <form action=" /bookmark/{{post.slug}} " style="margin-right: 0px; " method="post " id="bookmark">
+            {% if user.is_authenticated%} {% if post.status == 'draft'%} <i class="fa-sharp fa-solid fa-eye-slash fa-xl"></i>{%else%}
+            <form action=" /bookmark/{{post.slug}} " method="post " id="bookmark">
                 {% csrf_token %} {%if user in post.bookmark.all %}
                 <button type="submit " name="post_id " value="{{post.id}} "><i class="fa-solid fa-bookmark" style="color: blue;"></i>&nbsp; 
                         {%else%}
@@ -32,7 +32,7 @@
                         {%endif%}
                     </button>
             </form>
-            {%endif%}
+            {%endif%} {%endif%}
         </div>
     </div>
     {% endfor %}

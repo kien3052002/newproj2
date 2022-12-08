@@ -564,3 +564,31 @@
 .content-container .post-cat {
     width: 700px;
 }
+
+#tools-dropdown {
+    display: none;
+    position: absolute;
+    top: 60px;
+    width: 170px;
+    right: 170px;
+    border: transparent;
+    height: auto;
+}
+
+#tools:hover+#tools-dropdown,
+#tools-dropdown:hover {
+    display: table;
+}
+
+#tools-users,
+#tools-posts {
+    border-top: #5d5d5d solid 1px;
+    text-align: center;
+    height: 45px;
+}
+
+.fa-eye-slash {
+    position: absolute;
+    top: 20px;
+    right: 7px;
+}
