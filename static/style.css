@@ -19,7 +19,7 @@
 }
 
 .container {
-    border: solid #0094FF;
+    border: solid black;
     border-radius: 15px;
     background-color: white;
     margin: 30px;
@@ -41,7 +41,7 @@
 }
 
 .search-box {
-    border: solid #0094FF;
+    border: solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -514,34 +514,6 @@
     width: 100%;
     height: 755px;
 }
-
-
-/*  profile */
-
-.profile-container {
-    border: solid black 1px;
-    border-radius: 10px;
-    position: absolute;
-    top: 100px;
-    left: 100px;
-    height: 580px;
-    width: 850px;
-    background-color: #C0C0C0;
-}
-
-.user-search {
-    border: solid black 1px;
-    border-radius: 10px;
-    position: absolute;
-    top: 100px;
-    right: 70px;
-    height: 580px;
-    width: 420px;
-    background-color: #C0C0C0;
-}
-
-
-/* profile */
 
 .post-container #bookmark {
     position: absolute;

@@ -8,12 +8,12 @@
             <input class="form-control me-5" name="q" type="search" placeholder="Tìm kiếm" aria-label="Search">
         </div>
         <div class="tag-bar">
-            {% for tag in categorys.all%} {%if tag.name != 'default'%}
+            {% for tag in categorys.all%}
             <div class="tag-checkbox">
                 <label for="{{tag}}" class="">{{tag.name}}</label>
                 <input name="c" type="checkbox" id="{{tag}}" value="{{tag.pk}}">
             </div>
-            {% endif %} {%endfor%}
+            {%endfor%}
         </div>
         <button class="btn btn-primary" type="submit">search </button>
     </form>

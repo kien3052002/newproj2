@@ -8,12 +8,18 @@ from django.db.models import Q
 class PostAdmin(admin.ModelAdmin):
     list_display = ('Title', 'status', 'Slug', 'author')
     prepopulated_fields = {'slug': ('title',)}
+    exclude = ('likes', 'bookmark', 'author')
+    readonly_fields = ('likes', 'bookmark', 'author')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.filter(author=request.user)
+
+    def save_model(self, request, obj, form, change):
+        obj.author = request.user
+        super(PostAdmin, self).save_model(request, obj, form, change)
 
 
 @admin.register(models.Comment)

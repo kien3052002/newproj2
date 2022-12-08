@@ -26,8 +26,8 @@ class Post(models.Model):
 
     title = models.CharField(max_length=250)
     category = models.ManyToManyField(
-        Category, default=[1], related_name='posts')
-    excerpt = models.TextField(null=True)
+        Category, blank=True, related_name='posts')
+    excerpt = models.TextField(blank=True, null=True)
     slug = models.SlugField(max_length=250, unique_for_date='publish')
     image = models.FileField(
         upload_to='static/thumbnail/', default='static/thumbnail/default/default.jpg')
