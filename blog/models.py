@@ -1,9 +1,9 @@
-
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.template.defaultfilters import truncatechars
 
 
 class Category(models.Model):
@@ -51,19 +51,37 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def Title(self):
+        return truncatechars(self.title, 50)
+
+    @property
+    def Slug(self):
+        return truncatechars(self.slug, 50)
+
 
 class Comment(models.Model):
 
     post = models.ForeignKey(Post,
                              on_delete=models.CASCADE,
                              related_name='comments')
-    name = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, related_name='comments_made')
     content = models.TextField()
     publish = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=True)
+    post_author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ('publish',)
 
     def __str__(self):
         return f'Comment by {self.name}'
+
+    @property
+    def Content(self):
+        return truncatechars(self.content, 50)
+
+    @property
+    def Post(self):
+        return truncatechars(self.post, 50)

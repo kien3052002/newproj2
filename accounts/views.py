@@ -1,16 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import RegistrationForm, UserLoginForm
-from django.http import HttpResponseRedirect
-from django.contrib.auth import views as auth_views
-from django.contrib.auth.models import User
-
-
-@login_required
-def profile(request, id):
-    user_id = id
-    requested_user = User.objects.filter(id=user_id)[0]
-    return render(request, 'accounts/profile.html', {'requested_user': requested_user})
+from .forms import RegistrationForm
+from django.contrib.auth.models import Group
 
 
 def accounts_register(request):
@@ -22,6 +12,8 @@ def accounts_register(request):
             user.set_password(registerForm.cleaned_data['password'])
             user.is_active = True
             user.save()
+            user_group = Group.objects.get(name='Standard Users')
+            user.groups.add(user_group)
             return redirect("accounts:login")
     else:
         registerForm = RegistrationForm()
