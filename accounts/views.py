@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm
-from django.contrib.auth.models import Group
 
 
 def accounts_register(request):
@@ -12,8 +11,6 @@ def accounts_register(request):
             user.set_password(registerForm.cleaned_data['password'])
             user.is_active = True
             user.save()
-            user_group = Group.objects.get(name='Standard Users')
-            user.groups.add(user_group)
             return redirect("accounts:login")
     else:
         registerForm = RegistrationForm()
