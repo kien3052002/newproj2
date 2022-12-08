@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.conf import settings
 
 
 class Category(models.Model):
@@ -38,6 +37,8 @@ class Post(models.Model):
     content = RichTextUploadingField(null=True)
     status = models.CharField(max_length=10, choices=options, default='draft')
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
+    bookmark = models.ManyToManyField(
+        User, blank=True, related_name='bookmark')
     objects = models.Manager()  # default manager
     newmanager = NewManager()  # custom manager
 
