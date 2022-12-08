@@ -1,10 +1,10 @@
-{% extends "base/base.html" %} {% block title %} Đặc sản Thái Bình {% endblock %} {% load static %}{% block content %} {%include "base/nav-bar.html"%}
+{% extends "base/base.html" %} {% block title %} {%if bookmark_page%} Đã đánh dấu {%else%} Đặc sản Thái Bình {%endif%} {% endblock %} {% load static %}{% block content %} {%include "base/nav-bar.html"%}
 <div class="bgpic"><img src="{% static 'Bien-Thai-Binh.jpg' %}" /></div>
 
 <div class="col">
     <div class="row" id="row-titlecard">
         <div class="titlecard">
-            <h1 style="font-size:400%">ĐẶC SẢN THÁI BÌNH</h1>
+            <h1 style="font-size:400%">{%if bookmark_page%} ĐÃ ĐÁNH DẤU {%else%} ĐẶC SẢN THÁI BÌNH {%endif%}</h1>
         </div>
     </div>
     <div class="row ">
